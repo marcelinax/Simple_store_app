@@ -4,7 +4,9 @@
   padding: 0;
   font-family: "Poppins", sans-serif;
 }
-
+body {
+  position: relative;
+}
 header {
   width: 100%;
   display: flex;
@@ -98,7 +100,7 @@ header {
       margin-right: 2rem;
       transition: 0.4s all;
       &:hover {
-        transform: rotateZ(10deg) scale(1.1);
+        transform: rotateY(180deg) scale(1.1);
       }
       img {
         width: 20px;
@@ -170,10 +172,27 @@ main {
     }
   }
 }
-// .shopping-bag-box {
-//   width: 100%;
-//   display: flex;
-//   height: 10px;
-//   background-color: turquoise;
-//   z-index: 100000;
-// }
+.shopping-bag-section {
+  width: 300px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  height: 100vh;
+  background-color: white;
+  z-index: 100001;
+  box-shadow: 0 0 20px rgba(#000, 0.2);
+  flex-direction: column;
+
+  h3 {
+    margin-left: 1.5rem;
+    margin-top: 3rem;
+    font-size: 15px;
+  }
+  h4 {
+    position: absolute;
+    bottom: 1rem;
+    left: 1.5rem;
+    font-size: 13px;
+  }
+}

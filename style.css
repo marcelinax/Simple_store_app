@@ -5,6 +5,10 @@
   font-family: "Poppins", sans-serif;
 }
 
+body {
+  position: relative;
+}
+
 header {
   width: 100%;
   display: -webkit-box;
@@ -165,8 +169,8 @@ header .shopping-bag-box .shopping-bag-icon {
 }
 
 header .shopping-bag-box .shopping-bag-icon:hover {
-  -webkit-transform: rotateZ(10deg) scale(1.1);
-          transform: rotateZ(10deg) scale(1.1);
+  -webkit-transform: rotateY(180deg) scale(1.1);
+          transform: rotateY(180deg) scale(1.1);
 }
 
 header .shopping-bag-box .shopping-bag-icon img {
@@ -270,5 +274,37 @@ main .products-section .products-box .products-list .product-item .shopping-cart
 main .products-section .products-box .products-list .product-item .shopping-cart:hover {
   -webkit-transform: rotateZ(10deg) scale(1.1);
           transform: rotateZ(10deg) scale(1.1);
+}
+
+.shopping-bag-section {
+  width: 300px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100vh;
+  background-color: white;
+  z-index: 100001;
+  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.shopping-bag-section h3 {
+  margin-left: 1.5rem;
+  margin-top: 3rem;
+  font-size: 15px;
+}
+
+.shopping-bag-section h4 {
+  position: absolute;
+  bottom: 1rem;
+  left: 1.5rem;
+  font-size: 13px;
 }
 /*# sourceMappingURL=style.css.map */

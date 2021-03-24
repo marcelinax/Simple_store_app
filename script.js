@@ -87,15 +87,15 @@ class ShoppingBag {
     this.initCreateShoppingBagBox();
   }
   createShoppingBagBox() {
-    const shoppingBagBox = document.createElement("div");
-    shoppingBagBox.classList.add("shopping-bag-box");
+    const shoppingBagBox = document.createElement("section");
+    shoppingBagBox.classList.add("shopping-bag-section");
     let content = `
         <h3>Shopping bag</h3>
         <div class="shopping-bag-products"></div>
         <h4>Sum</h4>
       `;
     shoppingBagBox.innerHTML = content;
-    document.body.appendChild(shoppingBagBox);
+    document.body.prepend(shoppingBagBox);
   }
   initCreateShoppingBagBox() {
     const shoppingBagBtn = document.querySelector(".shopping-bag-icon");
