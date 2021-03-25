@@ -5,6 +5,7 @@ class Product {
     this.productName = productName;
     this.productPrice = productPrice;
     this.renderNewProduct();
+    this.initAddProductToTheCart();
   }
   renderNewProduct() {
     const productItem = document.createElement("li");
@@ -18,6 +19,36 @@ class Product {
       `;
     productItem.innerHTML = content;
     productsList.appendChild(productItem);
+  }
+
+  addProductToTheCart() {
+    const shoppingBagProductsBox = document.querySelector(
+      ".shopping-bag-products"
+    );
+    const shoppingBagSection = document.querySelector(".shopping-bag-section");
+    const shoppingBagProductBox = document.createElement("div");
+    shoppingBagProductBox.classList.add("shopping-bag-product");
+    let content = `
+          <h5>${this.productName}</h5>
+          <button class="delete-btn"></button>
+          <p>${this.productPrice}$</p>
+      `;
+    shoppingBagProductBox.innerHTML = content;
+    shoppingBagProductsBox.appendChild(shoppingBagProductBox);
+    shoppingBagSection.appendChild(shoppingBagProductsBox);
+  }
+  initAddProductToTheCart() {
+    const shoppingCartBtns = document.querySelectorAll(".shopping-cart");
+    shoppingCartBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        if (
+          e.target.parentElement.firstElementChild.textContent ===
+          this.productName
+        )
+          this.addProductToTheCart();
+        return;
+      });
+    });
   }
 }
 
@@ -61,18 +92,19 @@ class Products {
       return;
     }
 
-    let addingProductsNames = [];
-    this.products.filter((product) => {
-      if (product.productName === productNameValue)
-        addingProductsNames.push(product.productName);
-    });
-
-    if (addingProductsNames.length > 0) return;
+    if (
+      this.products.filter(
+        (product) => product.productName === productNameValue
+      ).length > 0
+    )
+      return;
     else {
       const product = new Product(productNameValue, productPriceValue);
       this.products.push(product);
       this.saveInLocalStorage();
     }
+    document.getElementById("product-name").value = "";
+    document.getElementById("product-price").value = "";
   }
   initCreateNewProduct() {
     const addBtn = document.querySelector(".add-product-btn");
@@ -90,10 +122,10 @@ class ShoppingBag {
     const shoppingBagBox = document.createElement("section");
     shoppingBagBox.classList.add("shopping-bag-section");
     let content = `
-        <h3>Shopping bag</h3>
-        <div class="shopping-bag-products"></div>
-        <h4>Sum</h4>
-      `;
+          <h3>Shopping bag</h3>
+          <div class="shopping-bag-products"></div>
+          <h4>Sum</h4>
+        `;
     shoppingBagBox.innerHTML = content;
     document.body.prepend(shoppingBagBox);
   }
