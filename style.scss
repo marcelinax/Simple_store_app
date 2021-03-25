@@ -206,6 +206,13 @@ main {
     padding: 1rem;
     border-radius: 60px;
   }
+  .sum {
+    position: absolute;
+    color: #e5383b;
+    font-size: 15px;
+    bottom: 40px;
+    right: 40px;
+  }
   .shopping-bag-products {
     display: flex;
     width: 100%;
@@ -226,7 +233,6 @@ main {
       position: relative;
       justify-content: center;
       margin-top: 1rem;
-      overflow: auto;
       word-wrap: break-word;
       &:first-child {
         margin-top: 0.2rem;
@@ -243,6 +249,7 @@ main {
         color: #e5383b;
         margin-top: 0.5rem;
       }
+
       .delete-btn {
         background-image: url(assets/delete-bin-line.svg);
         background-position: center;
@@ -259,6 +266,7 @@ main {
         outline: none;
       }
     }
+
     &::-webkit-scrollbar {
       width: 10px;
     }
@@ -274,6 +282,25 @@ main {
 
     &::-webkit-scrollbar-thumb:hover {
       background: #555;
+    }
+  }
+  .close-shopping-bag {
+    background-image: url(assets/close-line.svg);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: transparent;
+    transition: all 0.3;
+    &:hover {
+      transform: scale(1.4);
     }
   }
 }

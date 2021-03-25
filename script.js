@@ -25,12 +25,15 @@ class Product {
 class Products {
   products = [];
   addedProducts = [];
+  productIndex = 0;
 
   constructor() {
     this.readFromSessionStorage();
     this.initCreateNewProduct();
     this.readFromLocalStorage();
     this.initAddProductToTheCart();
+    this.initDeleteProductFromTheCart();
+    this.calcSum();
   }
 
   saveInLocalStorage() {
@@ -55,6 +58,7 @@ class Products {
   }
   readFromSessionStorage() {
     this.addedProducts = [];
+    document.querySelector(".shopping-bag-products").innerHTML = "";
     const localAddedProduct = sessionStorage.getItem("addedProducts");
     if (localAddedProduct) {
       const productsShapes = JSON.parse(
@@ -65,10 +69,12 @@ class Products {
           productName: productShape.productName,
           productPrice: productShape.productPrice,
         };
+
         this.addedProducts.push(product);
         this.addProductToTheCart(product);
       });
     }
+    this.calcSum();
   }
   createNewProduct() {
     const productNameValue = document.getElementById("product-name").value;
@@ -122,6 +128,7 @@ class Products {
     shoppingBagProductBox.innerHTML = content;
     shoppingBagProductsBox.appendChild(shoppingBagProductBox);
     shoppingBagSection.appendChild(shoppingBagProductsBox);
+    this.initDeleteProductFromTheCart();
   }
   initAddProductToTheCart() {
     const shoppingCartBtns = document.querySelectorAll(".shopping-cart");
@@ -136,12 +143,48 @@ class Products {
         );
         if (addedProduct.length > 0) {
           this.addProductToTheCart(addedProduct[0]);
+
           this.addedProducts.push(addedProduct[0]);
           this.saveInSessionStorage();
+          this.calcSum();
         }
         return;
       });
     });
+  }
+  deleteProductFromTheCart(index) {
+    this.addedProducts = [...this.addedProducts.filter((_, i) => i !== index)];
+    this.saveInSessionStorage();
+    this.readFromSessionStorage();
+    return;
+  }
+
+  initDeleteProductFromTheCart() {
+    const deleteBtns = document.querySelectorAll(".delete-btn");
+    const addedProducts = JSON.parse(sessionStorage.getItem("addedProducts"));
+
+    deleteBtns.forEach((btn, index) => {
+      btn.addEventListener("click", (e) => {
+        const productToRemove = addedProducts.filter(
+          (product) =>
+            product.productName ===
+            e.target.previousSibling.previousSibling.textContent
+        );
+        if (productToRemove.length > 0) {
+          this.deleteProductFromTheCart(index);
+        }
+        return;
+      });
+    });
+  }
+  calcSum() {
+    const sum = document.querySelector(".sum");
+    const addedProducts = JSON.parse(sessionStorage.getItem("addedProducts"));
+    if (addedProducts && addedProducts.length > 0) {
+      sum.innerHTML = `${addedProducts
+        .map((product) => product.productPrice)
+        .reduce((cur, sum) => cur + sum)}$`;
+    } else sum.innerHTML = `0$`;
   }
 }
 
@@ -155,10 +198,11 @@ class ShoppingBag {
     const shoppingBagBox = document.createElement("section");
     shoppingBagBox.classList.add("shopping-bag-section");
     let content = `
-          <button class="close-shopping-bag">Close</button>
+          <button class="close-shopping-bag"></button>
           <h3>Shopping bag</h3>
           <div class="shopping-bag-products"></div>
           <h4>Sum</h4>
+          <p class="sum"></p>
         `;
     shoppingBagBox.innerHTML = content;
     document.body.prepend(shoppingBagBox);

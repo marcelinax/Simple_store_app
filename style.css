@@ -319,6 +319,14 @@ main .products-section .products-box .products-list .product-item .shopping-cart
   border-radius: 60px;
 }
 
+.shopping-bag-section .sum {
+  position: absolute;
+  color: #e5383b;
+  font-size: 15px;
+  bottom: 40px;
+  right: 40px;
+}
+
 .shopping-bag-section .shopping-bag-products {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -360,7 +368,6 @@ main .products-section .products-box .products-list .product-item .shopping-cart
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 1rem;
-  overflow: auto;
   word-wrap: break-word;
 }
 
@@ -414,5 +421,28 @@ main .products-section .products-box .products-list .product-item .shopping-cart
 
 .shopping-bag-section .shopping-bag-products::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.shopping-bag-section .close-shopping-bag {
+  background-image: url(assets/close-line.svg);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: transparent;
+  -webkit-transition: all 0.3;
+  transition: all 0.3;
+}
+
+.shopping-bag-section .close-shopping-bag:hover {
+  -webkit-transform: scale(1.4);
+          transform: scale(1.4);
 }
 /*# sourceMappingURL=style.css.map */
