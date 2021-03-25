@@ -279,7 +279,7 @@ main .products-section .products-box .products-list .product-item .shopping-cart
   width: 340px;
   position: fixed;
   top: 0;
-  right: 0;
+  right: -100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -292,6 +292,12 @@ main .products-section .products-box .products-list .product-item .shopping-cart
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+}
+
+.shopping-bag-section--active {
+  right: 0;
 }
 
 .shopping-bag-section h3 {

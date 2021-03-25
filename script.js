@@ -1,11 +1,11 @@
 "use strict";
 
 class Product {
+  addingProducts = [];
   constructor(productName, productPrice) {
     this.productName = productName;
     this.productPrice = productPrice;
     this.renderNewProduct();
-    this.initAddProductToTheCart();
   }
   renderNewProduct() {
     const productItem = document.createElement("li");
@@ -20,43 +20,17 @@ class Product {
     productItem.innerHTML = content;
     productsList.appendChild(productItem);
   }
-
-  addProductToTheCart() {
-    const shoppingBagProductsBox = document.querySelector(
-      ".shopping-bag-products"
-    );
-    const shoppingBagSection = document.querySelector(".shopping-bag-section");
-    const shoppingBagProductBox = document.createElement("div");
-    shoppingBagProductBox.classList.add("shopping-bag-product");
-    let content = `
-          <h5>${this.productName}</h5>
-          <button class="delete-btn"></button>
-          <p>${this.productPrice}$</p>
-      `;
-    shoppingBagProductBox.innerHTML = content;
-    shoppingBagProductsBox.appendChild(shoppingBagProductBox);
-    shoppingBagSection.appendChild(shoppingBagProductsBox);
-  }
-  initAddProductToTheCart() {
-    const shoppingCartBtns = document.querySelectorAll(".shopping-cart");
-    shoppingCartBtns.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        if (
-          e.target.parentElement.firstElementChild.textContent ===
-          this.productName
-        )
-          this.addProductToTheCart();
-        return;
-      });
-    });
-  }
 }
 
 class Products {
   products = [];
+  addedProducts = [];
+
   constructor() {
+    this.readFromSessionStorage();
     this.initCreateNewProduct();
     this.readFromLocalStorage();
+    this.initAddProductToTheCart();
   }
 
   saveInLocalStorage() {
@@ -73,6 +47,26 @@ class Products {
           productShape.productPrice
         );
         this.products.push(product);
+      });
+    }
+  }
+  saveInSessionStorage() {
+    sessionStorage.setItem("addedProducts", JSON.stringify(this.addedProducts));
+  }
+  readFromSessionStorage() {
+    this.addedProducts = [];
+    const localAddedProduct = sessionStorage.getItem("addedProducts");
+    if (localAddedProduct) {
+      const productsShapes = JSON.parse(
+        sessionStorage.getItem("addedProducts")
+      );
+      productsShapes.forEach((productShape) => {
+        const product = {
+          productName: productShape.productName,
+          productPrice: productShape.productPrice,
+        };
+        this.addedProducts.push(product);
+        this.addProductToTheCart(product);
       });
     }
   }
@@ -105,6 +99,7 @@ class Products {
     }
     document.getElementById("product-name").value = "";
     document.getElementById("product-price").value = "";
+    this.initAddProductToTheCart();
   }
   initCreateNewProduct() {
     const addBtn = document.querySelector(".add-product-btn");
@@ -112,16 +107,55 @@ class Products {
       this.createNewProduct();
     });
   }
+  addProductToTheCart(product) {
+    const shoppingBagProductsBox = document.querySelector(
+      ".shopping-bag-products"
+    );
+    const shoppingBagSection = document.querySelector(".shopping-bag-section");
+    const shoppingBagProductBox = document.createElement("div");
+    shoppingBagProductBox.classList.add("shopping-bag-product");
+    let content = `
+          <h5>${product.productName}</h5>
+          <button class="delete-btn"></button>
+          <p>${product.productPrice}$</p>
+      `;
+    shoppingBagProductBox.innerHTML = content;
+    shoppingBagProductsBox.appendChild(shoppingBagProductBox);
+    shoppingBagSection.appendChild(shoppingBagProductsBox);
+  }
+  initAddProductToTheCart() {
+    const shoppingCartBtns = document.querySelectorAll(".shopping-cart");
+    const products = JSON.parse(localStorage.getItem("products"));
+
+    shoppingCartBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const addedProduct = products.filter(
+          (product) =>
+            product.productName ===
+            e.target.parentElement.firstElementChild.textContent
+        );
+        if (addedProduct.length > 0) {
+          this.addProductToTheCart(addedProduct[0]);
+          this.addedProducts.push(addedProduct[0]);
+          this.saveInSessionStorage();
+        }
+        return;
+      });
+    });
+  }
 }
 
 class ShoppingBag {
   constructor() {
+    this.createShoppingBagBox();
+    this.initCloseShoppingBag();
     this.initCreateShoppingBagBox();
   }
   createShoppingBagBox() {
     const shoppingBagBox = document.createElement("section");
     shoppingBagBox.classList.add("shopping-bag-section");
     let content = `
+          <button class="close-shopping-bag">Close</button>
           <h3>Shopping bag</h3>
           <div class="shopping-bag-products"></div>
           <h4>Sum</h4>
@@ -132,10 +166,20 @@ class ShoppingBag {
   initCreateShoppingBagBox() {
     const shoppingBagBtn = document.querySelector(".shopping-bag-icon");
     shoppingBagBtn.addEventListener("click", () => {
-      this.createShoppingBagBox();
+      document
+        .querySelector(".shopping-bag-section")
+        .classList.toggle("shopping-bag-section--active");
     });
   }
+  initCloseShoppingBag() {
+    document
+      .querySelector(".close-shopping-bag")
+      .addEventListener("click", () => {
+        document
+          .querySelector(".shopping-bag-section")
+          .classList.toggle("shopping-bag-section--active");
+      });
+  }
 }
-
-const products = new Products();
 const shoppingBag = new ShoppingBag();
+const products = new Products();
